@@ -16,6 +16,7 @@ where
     F: FnOnce(opentelemetry_otlp::OtlpTracePipeline) -> opentelemetry_otlp::OtlpTracePipeline,
 {
     use opentelemetry_otlp::WithExportConfig;
+    use opentelemetry::sdk::trace::XrayIdGenerator;
 
     opentelemetry::global::set_text_map_propagator(TraceContextPropagator::new());
     let (protocol, endpoint) = infer_protocol_and_endpoint(read_protocol_and_endpoint_from_env());
@@ -39,6 +40,7 @@ where
             opentelemetry::sdk::trace::config()
                 .with_resource(resource)
                 .with_sampler(read_sampler_from_env()),
+                .with_id_generator(XrayIdGenerator::default()),
         );
     pipeline = transform(pipeline);
     pipeline.install_batch(opentelemetry::runtime::Tokio)
