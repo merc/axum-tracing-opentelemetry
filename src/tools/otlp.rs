@@ -38,7 +38,7 @@ where
         .with_exporter(exporter)
         .with_trace_config(
             opentelemetry::sdk::trace::config()
-                .with_id_generator(XrayIdGenerator::default()),
+                .with_id_generator(XrayIdGenerator::default())
                 .with_resource(resource)
                 .with_sampler(read_sampler_from_env()),
         );
